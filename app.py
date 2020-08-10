@@ -1,7 +1,10 @@
 from flask import Flask, request, redirect, render_template, url_for, session, json, abort
 from werkzeug.security import generate_password_hash, check_password_hash
+from edu import parser
 import datetime as dt
 from db import Database
+import requests
+import lxml.html
 
 db = Database('main.db')
 app = Flask(__name__)
@@ -23,7 +26,7 @@ def add_message(login, text):
 def main():
     if 'user' not in session:
         return render_template('index.html', not_auth=True)
-    return render_template('index.html', not_auth=False, login=db.get_login(session['user']), messages=chat)
+    return render_template('index.html', not_auth=False, login=db.get_login(session['user']), messages=chat, days=parser('4717116286', 'UBK3'))
 
 
 @app.route('/add_message', methods=['GET', 'POST'])

@@ -19,65 +19,22 @@
     <div class="events"><h3>События</h3>
     </div>
     <div class="homework"><h3>Домашняя работа</h3>
-        <table class="main">
-            <tbody>
-            <tr>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-                <td>
-                    <p>text</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        {% for i in days %}
+            <table class="main" style='margin-top:20px'>
+                {% for day, subj in i.values() %}
+                <thead>day</thead>
+                <tbody>
+                    {% for d in subj %}
+                    <tr>
+                        <td>{{ d['sub'] }}</td>
+                        <td>{{ d['task'] }}</td>
+                        <td>{{ d['mark'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% endfor %}
+            </table>
+        {% endfor %}
     </div>
 
     <div class="chat"><h3>чат</h3>
