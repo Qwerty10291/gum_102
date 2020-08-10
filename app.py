@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, url_for, session, json
+from flask import Flask, request, redirect, render_template, url_for, session, json, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime as dt
 from db import Database
@@ -6,7 +6,7 @@ from db import Database
 db = Database('main.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oiwgvbib43ri34btui4b3tib43jutrn23jtbfo23qigfh'
-chat = [[1, 1]]
+chat = [['1', '1'], ['2','2']]
 
 
 def add_message(login, text):
@@ -31,10 +31,20 @@ def input_message():
     if 'user' not in session:
         return 'Error'
     if request.method == 'POST':
-        add_message(db.get_login(session['user']), request.form['text'])
-        print(request.form['text'])
-        return 'done'
+        try:
+            add_message(db.get_login(session['user']), request.form['text'])
+            print(request.form['text'])
+            return 'done'
+        except:
+            return 'error'
     return ''
+
+
+@app.route('/load_messages')
+def load_messages():
+    if 'user' not in session:
+        return abort(404)
+    return json.dumps(chat)
 
 
 @app.route('/load_message')
@@ -48,9 +58,9 @@ def load_message():
 def check_message():
     if request.method == 'POST':
         if request.form['message'] != chat[-1][1] or request.form['login'] != chat[-1][0]:
-            return 'True'
+            return 'yes'
         else:
-            return 'False'
+            return 'no'
     return ''
 
 
