@@ -92,8 +92,10 @@
             {% endfor %}
         </div>
         <div class="input_container">
+            {% if not not_auth %}
             <textarea id="message" cols="30" rows="3"></textarea>
             <button id="send">Отправить</button>
+            {% endif %}
         </div>
     </div>
 </div>
