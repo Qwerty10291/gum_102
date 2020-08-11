@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
 </head>
 <body>
-<h1 class="header"><a href="{{ url_for('/') }}">GUM_102</a></h1>
+<h1 class="header"><a href="{{ url_for('main') }}">GUM_102</a></h1>
 	<div class="form_container">
 		<p id='reg'>Вход</p>
 		<form action="/login" method="post" class="register_form">
@@ -19,6 +19,5 @@
 		<a href="{{ url_for('register') }}" id='login_link'>Еще нет аккаунта? Регистрация</a>
 		<p class="message_form">{{ flag }}</p>
 	</div>
-
 </body>
 </html>

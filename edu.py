@@ -2,6 +2,7 @@ import requests
 import lxml.html
 
 def parser(login, password):
+    print(login, password)
     ses = requests.Session()
     ses.headers.update({'Referer': "https://edu.tatar.ru/logon"})
     ses.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'})
@@ -22,3 +23,12 @@ def parser(login, password):
             'task':''.join(tree.xpath(f"/html/body/div/div/div[2]/div/table/tbody/tr[{i}]/td[@class='tt-task']/div/text()")).replace('\t', ''),
             'mark':''.join(tree.xpath(f"/html/body/div/div/div[2]/div/table/tbody/tr[{i}]/td[@class='tt-mark']/div/text()"))})
     return days
+
+def check_edu(login, password):
+    ses = requests.Session()
+    ses.headers.update({'Referer': "https://edu.tatar.ru/logon"})
+    ses.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'})
+    ses.post('https://edu.tatar.ru/logon', {'main_login': login, 'main_password': password})
+    ses.get('https://edu.tatar.ru/start/logon-process')
+    text = ses.get('https://edu.tatar.ru/').text
+    return 'Моя анкета' in text

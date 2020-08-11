@@ -1,8 +1,11 @@
 from flask import Flask, request, redirect, render_template, url_for, session, json, abort
 from werkzeug.security import generate_password_hash, check_password_hash
-from edu import parser
+import asyncio
+import websockets
+from edu import parser, check_edu
 import datetime as dt
 from db import Database
+from chat import Chat
 import requests
 import lxml.html
 
@@ -26,7 +29,7 @@ def add_message(login, text):
 def main():
     if 'user' not in session:
         return render_template('index.html', not_auth=True)
-    return render_template('index.html', not_auth=False, login=db.get_login(session['user']), messages=chat, days=parser('4717116286', 'UBK3'))
+    return render_template('index.html', not_auth=False, login=db.get_login(session['user']), messages=chat, days=parser(db.get_edu(session['user'])[0], db.get_edu(session['user'])[1]))
 
 
 @app.route('/add_message', methods=['GET', 'POST'])
@@ -89,9 +92,12 @@ def register():
         return redirect('/')
     if request.method == 'POST':
         if (not db.check_user(request.form['login'])) and (request.form['pass1'] == request.form['pass2']):
-            db.add_user(request.form['login'], generate_password_hash(request.form['pass1']), db.count_users())
-            session['user'] = db.get_id(request.form['login'])
-            return redirect('/')
+            if check_edu(request.form['edu_login'], request.form['edu_pass']):
+                db.add_user(request.form['login'], generate_password_hash(request.form['pass1']), request.form['edu_login'], request.form['edu_pass'], db.count_users())
+                session['user'] = db.get_id(request.form['login'])
+                return redirect('/')
+            else:
+                render_template('register.html', flag='Неправильный логин или пароль от edu tatar.')
         else:
             return render_template('register.html', flag='Произошла ошибка.Возможно такой логин занят или пароли не повторяются')
     return render_template('register.html')
@@ -104,6 +110,9 @@ def logout():
     session.pop('user')
     return redirect('/')
 
+start_server = websockets.serve(Chat.message_handler, "localhost", 8080)
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
 
 if __name__ == '__main__':
     app.run(debug=True)

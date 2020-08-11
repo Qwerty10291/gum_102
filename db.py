@@ -12,14 +12,11 @@ class Database:
             result = cursor.execute('SELECT * FROM `users` WHERE `login` = ?', (login,)).fetchall()
             return bool(len(result))
 
-    def get_last_id(self):
-        with sqlite3.connect(self.db) as db:
-            cursor = db.cursor()
 
-    def add_user(self, login, password, id):
+    def add_user(self, login, password, edu_login, edu_pass, id):
         with sqlite3.connect(self.db) as db:
             cursor = db.cursor()
-            cursor.execute('INSERT INTO `users` VALUES (?, ?, ?, ?)', (id, login, password, False))
+            cursor.execute('INSERT INTO `users` VALUES (?, ?, ?, ?, ?)', (id, login, password, edu_login, edu_pass))
 
     def get_id(self, login):
         with sqlite3.connect(self.db) as db:
@@ -34,7 +31,9 @@ class Database:
     def get_edu(self, id):
         with sqlite3.connect(self.db) as db:
             cursor = db.cursor()
-            return list(cursor.execute('SELECT `is_edu` FROM `users` WHERE `id` = ?', (id, )).fetchone())[0]
+            login = list(cursor.execute('SELECT `edu_login` FROM `users` WHERE `id` = ?', (id, )).fetchone())[0]
+            password = list(cursor.execute('SELECT `edu_pass` FROM `users` WHERE `id` = ?', (id, )).fetchone())[0]
+            return [login, password]
 
     def get_login(self, id):
         with sqlite3.connect(self.db) as db:
@@ -45,12 +44,7 @@ class Database:
         with sqlite3.connect(self.db) as db:
             cursor = db.cursor()
             return len(cursor.execute('SELECT * FROM `users`').fetchall())
-
-    def change_edu(self, id, login, password):
-        with sqlite3.connect(self.db) as db:
-            cursor = db.cursor()
-            cursor.execute('UPDATE `users` SET `is_edu` = ? WHERE `id` = ?', (True, id))
-            cursor.execute('INSERT INTO `edu` VALUES (?, ?, ?, ?)', (id, login, password, dt.now()))
+    
 
 
 

@@ -4,13 +4,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>GUM_102</title>
 </head>
 <body>
     <div class="header">
         <h1><a href="/">GYM_102</a></h1>
         {% if not_auth %}
-        <a href="">Авторизация</a>
+        <a href="{{ url_for('login') }}">Авторизация</a>
         {% else %}
         <a href="" id='login'> {{ login }}</a>
         {% endif %}
@@ -20,19 +20,17 @@
     </div>
     <div class="homework"><h3>Домашняя работа</h3>
         {% for i in days %}
-            <table class="main" style='margin-top:20px'>
-                {% for day, subj in i.values() %}
-                <thead>day</thead>
+            <table class='main' >
+                <thead>{{ i[0] }}</thead>
                 <tbody>
-                    {% for d in subj %}
+                {% for l in i[1] %}
                     <tr>
-                        <td>{{ d['sub'] }}</td>
-                        <td>{{ d['task'] }}</td>
-                        <td>{{ d['mark'] }}</td>
+                        <td>{{ l['sub'] }}</td>
+                        <td>{{ l['task'] }}</td>
+                        <td>{{ l['mark'] }}</td>
                     </tr>
-                    {% endfor %}
-                </tbody>
                 {% endfor %}
+                </tbody>
             </table>
         {% endfor %}
     </div>
