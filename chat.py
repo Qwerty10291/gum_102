@@ -2,22 +2,28 @@ import asyncio
 import logging
 import websockets
 import json
+logging.basicConfig(level=logging.INFO)
 
 class Chat:
-    async def __init__(self):
-        self.clients = set()
+    clients = set()
 
-    async def register(self, ws):
-        await self.clients.add(ws)
+    async def register(self, websocket):
+        self.clients.add(websocket)
+        logging.info(f'r{websocket}')
+
     
-    async def unregister(self, ws):
-        await self.clients.remove(ws)
+    async def unregister(self, websocket):
+        logging.info(f'q{websocket}')
+        self.clients.remove(websocket)
+
     
     async def send_message(self, message):
-        await asyncio.wait([client.send_message() for client in self.clients])
+        await asyncio.wait([client.send_message(message) for client in self.clients])
+        logging.info(message)
     
     async def message_handler(self, ws, path):
-        self.register(ws)
+        logging.info(f'hand{ws}')
+        await self.register(ws)
         try:
             async for message in ws:
                 self.send_message(message)

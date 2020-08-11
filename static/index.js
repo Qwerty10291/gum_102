@@ -9,7 +9,8 @@ let chat = [];
 $.get('/load_messages').done(function (data){chat = JSON.parse(data);console.log(chat);})
 
 function send_message(oihqefb){
-    $.post('/add_message', {'text':message_input.val()});
+    if(message_input.val().length > 0){
+    $.post('/add_message', {'text':message_input.val()});}
 }
 
 function add_message(logi, text){
@@ -29,5 +30,5 @@ function check_messages(){
     $.post('/check_message', {'login':chat[chat.length - 1][0], 'message':chat[chat.length - 1][1]}).done(function(data){
         if(data == 'yes'){get_last_message();}})
 }
-setInterval('check_messages()', 500);
+setInterval('check_messages()', 1000);
 message_button.click(send_message);

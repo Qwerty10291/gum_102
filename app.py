@@ -5,7 +5,6 @@ import websockets
 from edu import parser, check_edu
 import datetime as dt
 from db import Database
-from chat import Chat
 import requests
 import lxml.html
 
@@ -13,7 +12,6 @@ db = Database('main.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oiwgvbib43ri34btui4b3tib43jutrn23jtbfo23qigfh'
 chat = [['1', '1'], ['2','2']]
-
 
 def add_message(login, text):
     global chat
@@ -110,9 +108,7 @@ def logout():
     session.pop('user')
     return redirect('/')
 
-start_server = websockets.serve(Chat.message_handler, "localhost", 8080)
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
