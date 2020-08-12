@@ -95,7 +95,7 @@ def register():
                 session['user'] = db.get_id(request.form['login'])
                 return redirect('/')
             else:
-                render_template('register.html', flag='Неправильный логин или пароль от edu tatar.')
+                return render_template('register.html', flag='Неправильный логин или пароль от edu tatar.')
         else:
             return render_template('register.html', flag='Произошла ошибка.Возможно такой логин занят или пароли не повторяются')
     return render_template('register.html')
