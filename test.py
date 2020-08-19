@@ -1,7 +1,7 @@
-from chat import Chat as cht
-import websockets
+import requests
 import asyncio
-server = cht()
-start_server = websockets.serve(server.message_handler, "127.0.0.1", 6789)
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+
+async def send(text):
+    requests.post('http://127.0.0.1', data={'user': 'root', })
+
+for i in range(30):

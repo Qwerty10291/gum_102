@@ -2,9 +2,11 @@ from flask import Flask, request, redirect, render_template, url_for, session, j
 from werkzeug.security import generate_password_hash, check_password_hash
 import asyncio
 import websockets
+import datetime
 from edu import parser, check_edu
 import datetime as dt
 from db import Database
+from event import Event
 import requests
 import lxml.html
 
@@ -12,6 +14,7 @@ db = Database('main.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oiwgvbib43ri34btui4b3tib43jutrn23jtbfo23qigfh'
 chat = [['1', '1'], ['2','2']]
+events = [Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля'), Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля'), Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля')]
 
 def add_message(login, text):
     global chat
@@ -27,7 +30,7 @@ def add_message(login, text):
 def main():
     if 'user' not in session:
         return render_template('index.html', not_auth=True)
-    return render_template('index.html', not_auth=False, login=db.get_login(session['user']), messages=chat, days=parser(db.get_edu(session['user'])[0], db.get_edu(session['user'])[1]))
+    return render_template('index.html', not_auth=False, events=events, login=db.get_login(session['user']), messages=chat, days=parser(db.get_edu(session['user'])[0], db.get_edu(session['user'])[1]))
 
 
 @app.route('/add_message', methods=['GET', 'POST'])

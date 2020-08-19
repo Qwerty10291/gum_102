@@ -5,6 +5,7 @@ message_container.scrollTop(1000000);
 let login = $('#login')
 let title = $('title');
 let chat = [];
+let doc = document.querySelectorAll('.reader-view__wrap img').style.width = '1000px';
 
 $.get('/load_messages').done(function (data){chat = JSON.parse(data);console.log(chat);})
 

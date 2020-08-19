@@ -44,7 +44,6 @@ h1{
     background-color: #E4F1FB;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 .homework{
     width: 40vw;
@@ -114,4 +113,39 @@ h1{
     height: 50%;
     font-size: 25px;
     background-color: white;
+}
+
+.event_container{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 25px;
+    margin-top: 20px;
+}
+.event_container p{
+    margin-top: 5px;
+}
+
+@media all and (max-width: 800px){
+    .content-container{
+        flex-direction: column;
+    }
+    .events{
+        width: 100vw;
+        font-size: 10px;
+        border-bottom: 20px;
+    }
+    .chat{
+        width: 100vw;
+        font-size: 10px;
+        border-bottom: 20px;
+    }
+    .homework{
+        width: 100vw;
+        font-size: 10px;
+        border-bottom: 20px;
+    }
+    .event_container{
+        font-size: 10px;
+    }
 }

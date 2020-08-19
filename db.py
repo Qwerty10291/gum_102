@@ -44,6 +44,7 @@ class Database:
         with sqlite3.connect(self.db) as db:
             cursor = db.cursor()
             return len(cursor.execute('SELECT * FROM `users`').fetchall())
+
     
 
 
