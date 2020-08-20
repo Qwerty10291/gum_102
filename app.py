@@ -13,8 +13,8 @@ import lxml.html
 db = Database('main.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oiwgvbib43ri34btui4b3tib43jutrn23jtbfo23qigfh'
-chat = [['1', '1'], ['2','2']]
-events = [Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля'), Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля'), Event('математика', 'самостаятельная', 'тема: iedjcoiwejf', '19 апреля')]
+chat = [['1', '1']]
+events = []
 
 def add_message(login, text):
     global chat
@@ -111,7 +111,52 @@ def logout():
     session.pop('user')
     return redirect('/')
 
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if 'admin' in session:
+        return redirect('/admin')
+    if request.method == 'POST':
+        if (request.form['login'] == 'root') and (request.form['password'] == 'qwerty1029'):
+            session['admin'] = True
+            return redirect('/admin')
+        else:
+            return render_template('login.html', flag='Неправильный логин или пароль')
+    return render_template('admin_login.html')
 
+@app.route('/admin')
+def admin_panel():
+    if 'admin' not in session:
+        return abort(404)
+    return render_template('admin.html', elements=events)
+
+@app.route('/event_add', methods=['POST'])
+def add_event():
+    global events
+    if 'admin' not in session:
+        return abort(404)
+    events.append(Event(request.form['sub'], request.form['type'], request.form['description'], request.form['date'], len(events)))
+    return redirect('/admin')
+
+@app.route('/event_update', methods=['POST'])
+def update_event():
+    global events
+    if 'admin' not in session:
+        return abort(404)
+    for i in events:
+        if i.id == int(request.form['id']):
+            i.update(request.form['sub'], request.form['type'], request.form['description'], request.form['date'])
+    return redirect('/admin')
+
+@app.route('/event_del', methods=['POST'])
+def delete_event():
+    global events
+    if 'admin' not in session:
+        return abort(404)
+    for num, i in enumerate(events):
+        if i.id == int(request.form['id']):
+            del events[num]
+            break
+    return redirect('/admin')
 
 if __name__ == '__main__':
     app.run(debug=True)

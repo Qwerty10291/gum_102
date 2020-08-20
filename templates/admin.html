@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>добавить Событие</h2>
+    <form action="/event_add" method="post">
+        <label for="">Предмет</label><input type="text" name='sub'>
+        <label for="">Тип</label><input type="text" name="type">
+        <label for="">описание</label><input type="text" name='description'>
+        <label for="">дата</label><input type="text" name='date'>
+        <button type="submit">добавить</button>
+    </form>
+    <h2>Редактировать событие</h2>
+    <form action="/event_update" method='post'>
+        <select name="id">
+            {% for i in elements %}
+            <option value="{{ i.id }}">{{ i.lesson }}:{{ i.post_type }}</option>
+            {% endfor %}
+        </select>
+        <label for="">Предмет</label><input type="text" name='sub'>
+        <label for="">Тип</label><input type="text" name="type">
+        <label for="">описание</label><input type="text" name='description'>
+        <label for="">дата</label><input type="text" name='date'>
+        <button type="submit">обновить</button>
+    </form>
+    <h2>Удалить событие</h2>
+    <form action="/event_del" method="post">
+        <select name="id">
+            {% for i in elements %}
+            <option value="{{ i.id }}">{{ i.lesson }}:{{ i.post_type }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">обновить</button>
+    </form>
+</body>
+</html>
