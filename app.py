@@ -28,12 +28,15 @@ def add_message(login, text):
     else:
         chat = chat[1:] + [[login, text]]
 
+def get_messages():
+    with open('chat.txt') as cht:
+        return [i.split(':') for i in cht.readlines()[-50:]]
 
 @app.route('/')
 def main():
     if 'user' not in session:
         return render_template('index.html', not_auth=True)
-    return render_template('index.html', not_auth=False, events=events, login=db.get_login(session['user']), messages=chat, days=parser(db.get_edu(session['user'])[0], db.get_edu(session['user'])[1]))
+    return render_template('index.html', not_auth=False, events=events, login=db.get_login(session['user']), messages=get_messages())
 
 
 @app.route('/add_message', methods=['GET', 'POST'])

@@ -5,12 +5,14 @@ message_container.scrollTop(1000000);
 let login = $('#login')
 let title = $('title');
 let chat = [];
+let time = new Date().getTime()
 
 $.get('/load_messages').done(function (data){chat = JSON.parse(data);})
 
 function send_message(oihqefb){
-    if(message_input.val().length > 0){
-    $.post('/add_message', {'text':message_input.val()});}
+    if(message_input.val().length > 0 && Date().getTime() - time > 500){
+        time = new Date().getTime()
+        $.post('/add_message', {'text':message_input.val()});}
 }
 
 function add_message(logi, text){

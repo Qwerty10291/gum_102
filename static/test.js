@@ -3,6 +3,7 @@ let message_button = $('#send');
 let message_container = $('.chat_container')
 message_container.scrollTop(1000000);
 let login = $('#login')
+let time = new Date().getTime()
 
 web = new WebSocket('ws://127.0.0.1:6789');
 web.onmessage = function (event){
@@ -16,7 +17,15 @@ function add_message(logi, text){
 }
 
 function send_message(){
-    let data = JSON.stringify({login: login.text(), text: message_input.val()});
-    web.send(data);
+    let time_now = new Date().getTime()
+    if(time_now - time > 500 && message_input.val().length > 0){
+        time = new Date().getTime();
+        let data = JSON.stringify({login: login.text(), text: message_input.val()});
+        web.send(data);
+    }
 }
 message_button.click(send_message);
+message_input.keypress(function (event){
+    if(event.which == 13){message_input.val(message_input.val().replace('\n', ''));
+        send_message();};
+})

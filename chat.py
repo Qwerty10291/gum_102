@@ -5,6 +5,7 @@ import json
 from websockets import WebSocketServerProtocol
 
 logging.basicConfig()
+messages = open('chat.txt', 'w+')
 
 
 USERS = set()
@@ -22,11 +23,14 @@ async def unregister(websocket):
 
 
 async def counter(websocket, path):
+    global messages
     await register(websocket)
     logging.error('edfhjuweif')
     try:
         async for message in websocket:
             data = str(message)
+            save_data = json.loads(data)
+            messages.write(messages.read() + save_data['login'] + ':' + save_data['text'] + '\n')
             await send_message(data)
     finally:
         await unregister(websocket)
