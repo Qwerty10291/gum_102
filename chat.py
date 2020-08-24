@@ -2,30 +2,37 @@ import asyncio
 import logging
 import websockets
 import json
-logging.basicConfig(level=logging.INFO)
+from websockets import WebSocketServerProtocol
 
-class Chat:
-    clients = set()
+logging.basicConfig()
 
-    async def register(self, websocket):
-        self.clients.add(websocket)
-        logging.info(f'r{websocket}')
 
-    
-    async def unregister(self, websocket):
-        logging.info(f'q{websocket}')
-        self.clients.remove(websocket)
+USERS = set()
+async def send_message(message):
+        logging.error(message)
+        await asyncio.wait([user.send(message) for user in USERS])
 
-    
-    async def send_message(self, message):
-        await asyncio.wait([client.send_message(message) for client in self.clients])
-        logging.info(message)
-    
-    async def message_handler(self, ws, path):
-        logging.info(f'hand{ws}')
-        await self.register(ws)
-        try:
-            async for message in ws:
-                self.send_message(message)
-        finally:
-            self.unregister(ws)
+
+async def register(websocket):
+    USERS.add(websocket)
+
+
+async def unregister(websocket):
+    USERS.remove(websocket)
+
+
+async def counter(websocket, path):
+    await register(websocket)
+    logging.error('edfhjuweif')
+    try:
+        async for message in websocket:
+            data = str(message)
+            await send_message(data)
+    finally:
+        await unregister(websocket)
+
+
+start_server = websockets.serve(counter, "127.0.0.1", 6789)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()

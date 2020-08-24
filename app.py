@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import asyncio
 import websockets
 import datetime
+import logging
 from edu import parser, check_edu
 import datetime as dt
 from db import Database
@@ -15,6 +16,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oiwgvbib43ri34btui4b3tib43jutrn23jtbfo23qigfh'
 chat = [['1', '1']]
 events = []
+
+logging.basicConfig()
 
 def add_message(login, text):
     global chat
